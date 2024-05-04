@@ -11,11 +11,6 @@ import ChooseProfile from "./components/ChooseProfile";
 function App() {
   return (
     <Routes>
-      <Route
-        path="/school/:schoolName/:schoolId/"
-        element={<SchoolWebsite />}
-      />
-
       <Route path="/" element={<Redirect />} />
 
       <Route path="/auth/sign-up/" element={<SignUp />} />
@@ -29,10 +24,10 @@ function App() {
         path="/school/:schoolName/:schoolId/profile/"
         element={<SchoolProfile />}
       />
-      {/* <Route
-        path="/school/:schoolName/:schoolId/website/"
+      <Route
+        path="/school/:schoolName/:schoolId/"
         element={<SchoolWebsite />}
-      /> */}
+      />
     </Routes>
   );
 }

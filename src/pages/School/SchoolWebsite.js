@@ -39,6 +39,9 @@ const SchoolWebsite = () => {
       check: "text",
       icon: <PiTextT />,
       value: "نص جديد يمكنك تعديله",
+      size: "small",
+      weight: "font-normal",
+      position: "text-center",
     },
     {
       id: 2,
@@ -47,9 +50,19 @@ const SchoolWebsite = () => {
       icon: <ImImage />,
       value:
         "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-      test: "test",
       width: 300,
+      imagePosition: "",
     },
+    // {
+    //   id: 2,
+    //   title: "",
+    //   check: "image",
+    //   icon: <ImImage />,
+    //   value:
+    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
+    //   width: 300,
+    //   imagePosition: "",
+    // },
   ];
 
   const [websiteHolder, setWebsiteHolder] = React.useState([]);
@@ -67,8 +80,13 @@ const SchoolWebsite = () => {
         title: item?.title,
         check: item?.check,
         value: item?.value,
-        test: item?.test,
+        // image
         width: item?.width,
+        imagePosition: item?.imagePosition,
+        // text
+        size: item?.size,
+        weight: item?.weight,
+        position: item?.position,
       };
       return [...prev, newObj];
     });

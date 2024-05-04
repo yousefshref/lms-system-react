@@ -227,7 +227,7 @@ const ApiContext = ({ children }) => {
     type = "",
     data = {},
     setOpen = "",
-    navigate = false,
+    nav = false,
   }) => {
     try {
       const res = await axios.post(
@@ -238,9 +238,9 @@ const ApiContext = ({ children }) => {
       if (res.data.id) {
         setCreateProfileSuccess(true);
         if (setOpen) setOpen(false);
-      }
-      if (navigate) {
-        navigate(`/redirect/`);
+        if (nav) {
+          navigate(`/redirect/`);
+        }
       }
     } catch (err) {
       console.log(err);

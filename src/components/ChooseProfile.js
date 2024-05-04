@@ -16,7 +16,7 @@ const ChooseProfile = () => {
     apiContext?.createProfile({
       type: type,
       data: data,
-      navigate: true,
+      nav: true,
     });
   };
 
