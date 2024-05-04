@@ -16,6 +16,8 @@ function App() {
         element={<SchoolWebsite />}
       />
 
+      <Route path="/" element={<Redirect />} />
+
       <Route path="/auth/sign-up/" element={<SignUp />} />
       <Route path="/auth/log-in/" element={<LogIn />} />
 
