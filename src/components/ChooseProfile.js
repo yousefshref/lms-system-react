@@ -9,7 +9,7 @@ const ChooseProfile = () => {
   const loading = apiContext?.profileLoading;
 
   useEffect(() => {
-    apiContext?.checkUser();
+    apiContext?.checkUser({});
   }, [apiContext?.createProfileSuccess]);
 
   const createProfile = ({ type, data }) => {

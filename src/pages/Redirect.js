@@ -11,7 +11,7 @@ const Redirect = () => {
 
   const profileCreation = apiContext?.createProfileSuccess;
   useEffect(() => {
-    apiContext?.checkUser();
+    apiContext?.checkUser({});
   }, [profileCreation]);
 
   if (profile?.error && !loading) {

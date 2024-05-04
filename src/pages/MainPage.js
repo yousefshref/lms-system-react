@@ -8,7 +8,7 @@ const MainPage = () => {
   const loading = apiContext?.profileLoading;
 
   useEffect(() => {
-    apiContext?.checkUser();
+    apiContext?.checkUser({});
   }, []);
 
   return (

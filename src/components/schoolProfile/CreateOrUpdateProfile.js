@@ -10,7 +10,7 @@ const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
   const profileLoading = apiContext?.profileLoading;
 
   useEffect(() => {
-    apiContext?.checkUser();
+    apiContext?.checkUser({});
   }, []);
 
   const allSubjects = apiContext.subjects;
