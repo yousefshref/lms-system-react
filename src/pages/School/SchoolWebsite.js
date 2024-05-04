@@ -20,7 +20,7 @@ const SchoolWebsite = () => {
 
   useEffect(() => {
     apiContext?.checkUser({
-      user_id: id,
+      noNavigate: true,
     });
   }, []);
 

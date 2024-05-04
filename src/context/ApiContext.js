@@ -207,13 +207,13 @@ const ApiContext = ({ children }) => {
   const [profile, setProfile] = React.useState({});
   const [profileLoading, setProfileLoading] = React.useState(false);
 
-  const checkUser = async () => {
+  const checkUser = async ({ noNavigate = false }) => {
     try {
       const res = await axios.get(`${server}api/v1/check-user/`, headers);
       setProfile(res.data);
     } catch (error) {
       console.log(error);
-      if (error.response.status == 403) {
+      if (error.response.status == 403 && !noNavigate) {
         localStorage.clear();
         navigate("/auth/log-in/");
       }
@@ -272,7 +272,7 @@ const ApiContext = ({ children }) => {
   const [website, setWebsite] = React.useState({});
   const [websiteLoading, setWebsiteLoading] = React.useState(false);
 
-  const getWebsite = async ({ user_id = 1 }) => {
+  const getWebsite = async ({ user_id = "" }) => {
     setWebsiteLoading(true);
     try {
       const res = await axios.get(
