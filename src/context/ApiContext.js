@@ -208,21 +208,27 @@ const ApiContext = ({ children }) => {
   const [profileLoading, setProfileLoading] = React.useState(false);
 
   const checkUser = async () => {
-    setProfileLoading(true);
     try {
       const res = await axios.get(`${server}api/v1/check-user/`, headers);
       setProfile(res.data);
     } catch (error) {
       console.log(error);
+      if (error.response.status == 403) {
+        localStorage.clear();
+        navigate("/auth/log-in/");
+      }
     } finally {
-      setProfileLoading(false);
     }
   };
 
   const [loading, setLoading] = React.useState(false);
   const [createProfileSuccess, setCreateProfileSuccess] = React.useState(false);
-  const createProfile = async ({ type = "", data = {}, setOpen = "" }) => {
-    setLoading(true);
+  const createProfile = async ({
+    type = "",
+    data = {},
+    setOpen = "",
+    navigate = false,
+  }) => {
     try {
       const res = await axios.post(
         `${server}api/v1/profile/?type=${type}`,
@@ -233,10 +239,12 @@ const ApiContext = ({ children }) => {
         setCreateProfileSuccess(true);
         if (setOpen) setOpen(false);
       }
+      if (navigate) {
+        navigate(`/redirect/`);
+      }
     } catch (err) {
       console.log(err);
     } finally {
-      setLoading(false);
       setCreateProfileSuccess(false);
     }
   };
@@ -264,7 +272,7 @@ const ApiContext = ({ children }) => {
   const [website, setWebsite] = React.useState({});
   const [websiteLoading, setWebsiteLoading] = React.useState(false);
 
-  const getWebsite = async ({ user_id = "" }) => {
+  const getWebsite = async ({ user_id = 1 }) => {
     setWebsiteLoading(true);
     try {
       const res = await axios.get(
