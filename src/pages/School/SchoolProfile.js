@@ -90,7 +90,7 @@ const SchoolProfile = () => {
             <button
               onClick={() =>
                 apiContext?.navigate(
-                  `/school/${profile?.school?.user_details?.username}/${profile?.school?.user_details?.id}/`
+                  `/school/${profile?.user_details?.username}/${profile?.user_details?.id}/`
                 )
               }
               className="p-2 px-6 rounded-xl border bg-lime-600 bg-opacity-50 transition-all hover:bg-lime-600 cursor-pointer hover:bg-opacity-30 active:bg-opacity-50"
