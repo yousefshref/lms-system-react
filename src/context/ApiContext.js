@@ -1,0 +1,363 @@
+import axios from "axios";
+import React, { createContext, useContext } from "react";
+import { server } from "../utlits/Variable";
+import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { decodeToken } from "react-jwt";
+
+const ApiContext = ({ children }) => {
+  const headers = {
+    headers: {
+      Authorization: `Token ${localStorage.getItem("token")}`,
+    },
+  };
+
+  const [apiMessage, setApiMessage] = message.useMessage();
+  const error = (msg) => {
+    apiMessage.error(msg);
+  };
+  const success = (msg) => {
+    apiMessage.success(msg);
+  };
+
+  const navigate = useNavigate();
+
+  // const user = decodeToken(localStorage.getItem('access'))
+
+  const [subjects, setSubjects] = React.useState([]);
+
+  const getSubjects = async () => {
+    try {
+      const res = await axios.get(`${server}api/v1/subjects/`, headers);
+      setSubjects(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const [levels, setLevels] = React.useState([]);
+
+  const getLevels = async () => {
+    try {
+      const res = await axios.get(`${server}api/v1/levels/`, headers);
+      setLevels(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // const [profile, setProfile] = React.useState({})
+  // const [profileLoading, setProfileLoading] = React.useState(false)
+  // const getProfile = async () => {
+  //   setProfileLoading(true)
+  //   try {
+  //     const res = await axios.get(`${server}api/v1/check-user/`, headers)
+  //     setProfile(res.data)
+  //     console.log(res.data);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   finally {
+  //     setProfileLoading(false)
+  //   }
+  // }
+
+  // const [loginLoading, setLoginLoading] = React.useState(false)
+  // const logIn = async (data) => {
+  //   setLoginLoading(true)
+  //   try {
+  //     const res = await axios.post(`${server}api/v1/token/`, data)
+  //     if (res?.data?.access) {
+  //       localStorage.setItem('access', res.data.access)
+  //       localStorage.setItem('refresh', res.data.refresh)
+  //       success('تم تسجيل الدخول')
+  //       navigate('/redirect/')
+  //     }
+  //   } catch (err) {
+  //     Object.entries(err.response.data).forEach(([key, value]) => {
+  //       error(`${key}: ${value}`,)
+  //     })
+  //   }
+  //   finally {
+  //     setLoginLoading(false)
+  //   }
+  // }
+
+  // const [signupLogin, setSignupLogin] = React.useState(false)
+  // const signUp = async (data) => {
+  //   setSignupLogin(true)
+  //   try {
+  //     const res = await axios.post(`${server}api/v1/sign-up/`, data)
+  //     if (res?.data?.id) {
+  //       success('تم تسجيل الدخول')
+  //       logIn({ email: data.email, password: data.password })
+  //     } else {
+  //       console.log('error in singup');
+  //     }
+  //   } catch (err) {
+  //     Object.entries(err.response.data).forEach(([key, value]) => {
+  //       error(`${key}: ${value}`,)
+  //     })
+  //   }
+  //   finally {
+  //     setSignupLogin(false)
+  //   }
+  // }
+
+  // const [schoolProfile, setSchoolProfile] = React.useState({})
+  // const [schooProfileLoading, setSchoolProfileLoading] = React.useState(false)
+
+  // const getSchoolProfile = async () => {
+  //   setSchoolProfileLoading(true)
+  //   try {
+  //     const res = await axios.get(`${server}api/v1/schools/`, headers)
+  //     setSchoolProfile(res.data)
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  //   finally {
+  //     setSchoolProfileLoading(false)
+  //   }
+  // }
+
+  // const createSchoolProfile = async (data) => {
+  //   setSchoolProfileLoading(true)
+  //   try {
+  //     const res = await axios.post(`${server}api/v1/schools/`, data, headers)
+  //     if (res?.data?.id) {
+  //       success('تم انشاء حساب مدرسة')
+  //       navigate(`/school/${res?.data?.user_details?.username}/${res?.data?.user_details?.id}/profile/`)
+  //     } else {
+  //       console.log('error in create school profile');
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //     Object.entries(err.response.data).forEach(([key, value]) => {
+  //       error(`${key}: ${value}`)
+  //     })
+  //   }
+  //   finally {
+  //     setSchoolProfileLoading(false)
+  //   }
+  // }
+
+  // const [website, setWebsite] = React.useState({})
+  // const [websiteLoading, setWebsiteLoading] = React.useState(false)
+
+  // const getWebsite = async ({ pk = '' }) => {
+  //   setWebsiteLoading(true)
+  //   try {
+  //     const res = await axios.get(`${server}api/v1/website/?pk=${pk}`, headers)
+  //     setWebsite(res.data)
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setWebsiteLoading(false)
+  //   }
+  // }
+
+  // const updateWebsite = async (data) => {
+  //   setWebsiteLoading(true)
+  //   try {
+  //     const res = await axios.put(`${server}api/v1/website/update/`, data, headers)
+  //     if (res?.data?.id) {
+  //       success('تم تحديث الموقع')
+  //     } else {
+  //       console.log('error in create school profile');
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   } finally {
+  //     setWebsiteLoading(false)
+  //   }
+  // }
+
+  const singUp = async (data) => {
+    try {
+      const res = await axios.post(`${server}api/v1/signup/`, data, headers);
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("id", res.data.user.id);
+        success("تم تسجيل الدخول");
+        navigate("/redirect/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const logIn = async (data) => {
+    try {
+      const res = await axios.post(`${server}api/v1/login/`, data, headers);
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("id", res.data.user.id);
+        success("تم تسجيل الدخول");
+        navigate("/redirect/");
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const [profile, setProfile] = React.useState({});
+  const [profileLoading, setProfileLoading] = React.useState(false);
+
+  const checkUser = async () => {
+    setProfileLoading(true);
+    try {
+      const res = await axios.get(`${server}api/v1/check-user/`, headers);
+      setProfile(res.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const [loading, setLoading] = React.useState(false);
+  const [createProfileSuccess, setCreateProfileSuccess] = React.useState(false);
+  const createProfile = async ({ type = "", data = {}, setOpen = "" }) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${server}api/v1/profile/?type=${type}`,
+        data,
+        headers
+      );
+      if (res.data.id) {
+        setCreateProfileSuccess(true);
+        if (setOpen) setOpen(false);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+      setCreateProfileSuccess(false);
+    }
+  };
+
+  const updateProfile = async ({ data = {}, setOpen = "" }) => {
+    setLoading(true);
+    try {
+      const res = await axios.put(
+        `${server}api/v1/profile/update/`,
+        data,
+        headers
+      );
+      if (res.data.id) {
+        if (setOpen) setOpen(false);
+        setCreateProfileSuccess(true);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+      setCreateProfileSuccess(false);
+    }
+  };
+
+  const [website, setWebsite] = React.useState({});
+  const [websiteLoading, setWebsiteLoading] = React.useState(false);
+
+  const getWebsite = async ({ user_id = "" }) => {
+    setWebsiteLoading(true);
+    try {
+      const res = await axios.get(
+        `${server}api/v1/website/${user_id}/`,
+        headers
+      );
+      setWebsite(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setWebsiteLoading(false);
+    }
+  };
+
+  const updateWebsite = async ({ data = {}, user_id = "" }) => {
+    setWebsiteLoading(true);
+    try {
+      const res = await axios.put(
+        `${server}api/v1/website/${user_id}/`,
+        data,
+        headers
+      );
+      if (res?.data?.id) {
+        success("تم تحديث الموقع");
+      } else {
+        console.log("error in create school profile");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setWebsiteLoading(false);
+    }
+  };
+
+  return (
+    <ApiContextProvider.Provider
+      value={{
+        setApiMessage,
+        navigate,
+        success,
+        error,
+
+        singUp,
+        logIn,
+
+        profile,
+        profileLoading,
+        checkUser,
+
+        loading,
+
+        createProfileSuccess,
+        createProfile,
+        updateProfile,
+
+        website,
+        websiteLoading,
+        getWebsite,
+        updateWebsite,
+
+        // user,
+
+        subjects,
+        getSubjects,
+
+        levels,
+        getLevels,
+
+        // website,
+        // websiteLoading,
+        // getWebsite,
+        // updateWebsite,
+
+        // schoolProfile,
+        // schooProfileLoading,
+        // getSchoolProfile,
+        // createSchoolProfile,
+
+        // profileLoading,
+        // profile,
+        // getProfile,
+
+        // loginLoading,
+        // logIn,
+
+        // signupLogin,
+        // signUp,
+      }}
+    >
+      {children}
+    </ApiContextProvider.Provider>
+  );
+};
+
+export const ApiContextProvider = createContext();
+export default ApiContext;
