@@ -307,6 +307,57 @@ const ApiContext = ({ children }) => {
     }
   };
 
+  const [posts, setPosts] = React.useState([]);
+  const [postsLoading, setPostsLoading] = React.useState(false);
+
+  const getPosts = async () => {
+    setPostsLoading(true);
+    try {
+      const res = await axios.get(`${server}api/v1/posts/`, headers);
+      setPosts(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setPostsLoading(false);
+    }
+  };
+
+  const createPost = async ({ data = {}, getThem = false }) => {
+    setPostsLoading(true);
+    try {
+      const res = await axios.post(`${server}api/v1/posts/`, data, headers);
+      if (res.data.id) {
+        success("تم انشاء المنشور");
+        if (getThem) {
+          getPosts();
+        }
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setPostsLoading(false);
+    }
+  };
+
+  const deletePost = async (id) => {
+    setPostsLoading(true);
+    try {
+      const res = await axios.delete(`${server}api/v1/posts/${id}/`, headers);
+      if (res.data.id) {
+        success("تم حذف المنشور");
+        getPosts();
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setPostsLoading(false);
+    }
+  };
+
   return (
     <ApiContextProvider.Provider
       value={{
@@ -317,6 +368,12 @@ const ApiContext = ({ children }) => {
 
         singUp,
         logIn,
+
+        posts,
+        postsLoading,
+        getPosts,
+        createPost,
+        deletePost,
 
         profile,
         profileLoading,

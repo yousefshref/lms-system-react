@@ -1,3 +1,5 @@
 - text (bold, size, center or left or right) ✔
 - image positions ✔
-- split div
+
+
+- posts in the website

@@ -23,6 +23,8 @@ const Redirect = () => {
       `/school/${profile?.school?.user_details?.username}/${profile?.school?.user_details?.id}/profile/`
     );
   }
+
+  if (loading) return <LoadingScreen />;
 };
 
 export default Redirect;

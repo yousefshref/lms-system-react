@@ -18,7 +18,8 @@ body {
 }
 
 input,
-select {
+select,
+textarea {
   @apply p-3 rounded-xl border outline-none transition-all hover:border-indigo-600 focus:border-indigo-400;
 }
 

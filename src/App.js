@@ -7,6 +7,7 @@ import Redirect from "./pages/Redirect";
 import SchoolProfile from "./pages/School/SchoolProfile";
 import SchoolWebsite from "./pages/School/SchoolWebsite";
 import ChooseProfile from "./components/ChooseProfile";
+import SchoolPosts from "./pages/School/SchoolPosts";
 
 function App() {
   return (
@@ -24,9 +25,15 @@ function App() {
         path="/school/:schoolName/:schoolId/profile/"
         element={<SchoolProfile />}
       />
+
       <Route
         path="/school/:schoolName/:schoolId/"
         element={<SchoolWebsite />}
+      />
+
+      <Route
+        path="/school/:schoolName/:schoolId/posts/"
+        element={<SchoolPosts />}
       />
     </Routes>
   );
