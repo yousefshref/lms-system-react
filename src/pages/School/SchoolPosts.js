@@ -43,83 +43,90 @@ const SchoolPosts = () => {
       });
   };
 
+  const url = window.location.href;
+  const id = url.split("/").reverse()[2];
+
+  const is_admin = localStorage.getItem("id") === id;
+
   return (
     <DefaultLayout>
       <div className="p-4 flex flex-col gap-14">
         {/* create new post */}
-        <div className="flex flex-col gap-4 p-3 rounded-xl bg-white shadow-md w-full max-w-lg mx-auto">
-          <div className="flex flex-col gap-1 bg-zinc-300 p-3 rounded-xl">
-            <p>اكتب عنوان المنشور</p>
-            <input
-              placeholder="عنوان المنشور"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div className="flex gap-3 justify-between w-full">
-            <div
-              onClick={() => setOpenDescription(!openDescription)}
-              className="flex w-1/2 text-center cursor-pointer transition-all hover:bg-zinc-500 hover:bg-opacity-15 flex-col gap-1 bg-zinc-300 p-3 rounded-xl"
-            >
-              <p>وصف المنشور</p>
-            </div>
-            <Modal
-              center
-              className="font"
-              onCancel={() => setOpenDescription(!openDescription)}
-              title="وصف المنشور"
-              open={openDescription}
-              footer={null}
-              closeIcon={null}
-            >
-              <textarea
-                className="w-full"
-                placeholder="وصف المنشور"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+        {is_admin && (
+          <div className="flex flex-col gap-4 p-3 rounded-xl bg-white shadow-md w-full max-w-lg mx-auto">
+            <div className="flex flex-col gap-1 bg-zinc-300 p-3 rounded-xl">
+              <p>اكتب عنوان المنشور</p>
+              <input
+                placeholder="عنوان المنشور"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
-            </Modal>
-
-            <div
-              onClick={() => setOpenImage(!openImage)}
-              className="flex w-1/2 text-center cursor-pointer transition-all hover:bg-zinc-500 hover:bg-opacity-15 flex-col gap-1 bg-zinc-300 p-3 rounded-xl"
-            >
-              <p>صورة في المنشور</p>
             </div>
-            <Modal
-              center
-              onCancel={() => setOpenImage(!openImage)}
-              title="صورة في المنشور"
-              open={openImage}
-              footer={null}
-              closeIcon={null}
-            >
-              <div className="flex flex-col gap-2">
-                <input
-                  type="file"
-                  onChange={(e) => setImage(e.target.files[0])}
-                />
-                <small
-                  onClick={() => setImage("")}
-                  className="text-red-500 cursor-pointer"
-                >
-                  حذف الصورة
-                </small>
-                {typeof image === "string" && (
-                  <img src={server + image} alt={title} />
-                )}
-                {typeof image === "object" && image ? (
-                  <img src={URL.createObjectURL(image)} alt={title} />
-                ) : null}
+            <div className="flex gap-3 justify-between w-full">
+              <div
+                onClick={() => setOpenDescription(!openDescription)}
+                className="flex w-1/2 text-center cursor-pointer transition-all hover:bg-zinc-500 hover:bg-opacity-15 flex-col gap-1 bg-zinc-300 p-3 rounded-xl"
+              >
+                <p>وصف المنشور</p>
               </div>
-            </Modal>
+              <Modal
+                center
+                className="font"
+                onCancel={() => setOpenDescription(!openDescription)}
+                title="وصف المنشور"
+                open={openDescription}
+                footer={null}
+                closeIcon={null}
+              >
+                <textarea
+                  className="w-full"
+                  placeholder="وصف المنشور"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Modal>
+
+              <div
+                onClick={() => setOpenImage(!openImage)}
+                className="flex w-1/2 text-center cursor-pointer transition-all hover:bg-zinc-500 hover:bg-opacity-15 flex-col gap-1 bg-zinc-300 p-3 rounded-xl"
+              >
+                <p>صورة في المنشور</p>
+              </div>
+              <Modal
+                center
+                onCancel={() => setOpenImage(!openImage)}
+                title="صورة في المنشور"
+                open={openImage}
+                footer={null}
+                closeIcon={null}
+              >
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="file"
+                    onChange={(e) => setImage(e.target.files[0])}
+                  />
+                  <small
+                    onClick={() => setImage("")}
+                    className="text-red-500 cursor-pointer"
+                  >
+                    حذف الصورة
+                  </small>
+                  {typeof image === "string" && (
+                    <img src={server + image} alt={title} />
+                  )}
+                  {typeof image === "object" && image ? (
+                    <img src={URL.createObjectURL(image)} alt={title} />
+                  ) : null}
+                </div>
+              </Modal>
+            </div>
+            <div className="flex justify-center p-e rounded-xl">
+              <button onClick={createPost} className="btn-secondary w-full">
+                نشر
+              </button>
+            </div>
           </div>
-          <div className="flex justify-center p-e rounded-xl">
-            <button onClick={createPost} className="btn-secondary w-full">
-              نشر
-            </button>
-          </div>
-        </div>
+        )}
 
         {/* posts */}
         <div className="flex flex-col gap-5 rounded-xl w-full max-w-lg mx-auto">
@@ -128,7 +135,9 @@ const SchoolPosts = () => {
               <Loading />
             </div>
           ) : posts?.length > 0 ? (
-            posts?.map((post, index) => <Post key={index} post={post} />)
+            posts?.map((post, index) => (
+              <Post is_admin={is_admin} key={index} post={post} />
+            ))
           ) : (
             <p className="text-center">لا توجد منشورات</p>
           )}

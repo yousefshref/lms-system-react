@@ -3,6 +3,8 @@ import { CgProfile, CgWebsite } from "react-icons/cg";
 import { ApiContextProvider } from "../../context/ApiContext";
 import { ImProfile } from "react-icons/im";
 import { BsPostcard } from "react-icons/bs";
+import { FaWpforms } from "react-icons/fa";
+import { SiGoogleforms } from "react-icons/si";
 
 const DefaultLayout = ({ children }) => {
   const apiContext = useContext(ApiContextProvider);
@@ -11,6 +13,7 @@ const DefaultLayout = ({ children }) => {
   useEffect(() => {
     apiContext?.checkUser({});
   }, []);
+
   return (
     <div className="p-4 flex flex-col gap-8">
       {apiContext?.setApiMessage}
@@ -54,6 +57,19 @@ const DefaultLayout = ({ children }) => {
               <BsPostcard />
             </span>
             <p>المنشورات</p>
+          </div>
+          <div
+            onClick={() =>
+              apiContext?.navigate(
+                `/school/${profile?.school?.user_details?.username}/${profile?.school?.user_details?.id}/forms/`
+              )
+            }
+            className="text-sm flex gap-2 underline underline-offset-4 cursor-pointer"
+          >
+            <span className="my-auto">
+              <SiGoogleforms />
+            </span>
+            <p>الاستطلاعات</p>
           </div>
         </div>
         <span className="text-4xl cursor-pointer my-auto">

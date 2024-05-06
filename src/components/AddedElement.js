@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { BiEdit, BiTrash } from "react-icons/bi";
+import { ApiContextProvider } from "../context/ApiContext";
+import Post from "./Post";
+import Loading from "./Loading";
+import { CiWarning } from "react-icons/ci";
+import { useParams } from "react-router-dom";
 
 const AddedElement = ({
   element,
@@ -61,8 +66,65 @@ const AddedElement = ({
     setValue(null);
   };
 
+  // posts
+  const apiContext = useContext(ApiContextProvider);
+
+  const posts = apiContext?.posts;
+  const postsLoading = apiContext?.postsLoading;
+
+  useEffect(() => {
+    apiContext?.getPosts();
+  }, []);
+
+  const params = useParams();
+
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex flex-col gap-4">
+      {element?.check === "space" && <br />}
+      {element?.check === "posts" && (
+        <div className="flex flex-col-reverse p-2 rounded-xl relative gap-2">
+          {is_admin && (
+            <div className="flex gap-3">
+              <span
+                className="text-red-600 cursor-pointer my-auto"
+                onClick={() => deleteElement()}
+              >
+                <BiTrash />
+              </span>
+            </div>
+          )}
+          <div className="flex overflow-y-scroll min-h-fit max-h-[600px] flex-col gap-4 md:p-8 p-3 rounded-xl border border-indigo-800">
+            <div className="flex gap-3 justify-between">
+              <p className="my-auto text-xl">أخر المنشورات</p>
+              <p
+                onClick={() =>
+                  apiContext?.navigate(
+                    `/school/${params.schoolName}/${params.schoolId}/posts/`
+                  )
+                }
+                className="my-auto text-blue-800 text-sm cursor-pointer"
+              >
+                جميع المنشورات
+              </p>
+            </div>
+            <hr />
+            {postsLoading ? (
+              <Loading />
+            ) : posts?.length > 0 ? (
+              posts
+                ?.slice(0, 5)
+                ?.map((post, index) => <Post key={index} post={post} />)
+            ) : (
+              <p className="flex gap-3">
+                <span className="my-auto">
+                  <CiWarning />
+                </span>
+                <p className="my-auto">لا يوجد متشروات اليوم</p>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
       {element?.check === "image" && (
         <div className="flex flex-col-reverse p-2 rounded-xl relative gap-2">
           {is_admin && (

@@ -8,6 +8,8 @@ import SchoolProfile from "./pages/School/SchoolProfile";
 import SchoolWebsite from "./pages/School/SchoolWebsite";
 import ChooseProfile from "./components/ChooseProfile";
 import SchoolPosts from "./pages/School/SchoolPosts";
+import SchoolForms from "./pages/School/SchoolForms";
+import FormDetails from "./components/FormDetails";
 
 function App() {
   return (
@@ -35,6 +37,13 @@ function App() {
         path="/school/:schoolName/:schoolId/posts/"
         element={<SchoolPosts />}
       />
+
+      <Route
+        path="/school/:schoolName/:schoolId/forms/"
+        element={<SchoolForms />}
+      />
+
+      <Route path="/form/:formId/" element={<FormDetails />} />
     </Routes>
   );
 }

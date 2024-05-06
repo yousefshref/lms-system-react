@@ -2,4 +2,8 @@
 - image positions ✔
 
 
-- posts in the website
+- posts in the website ✔
+- display posts in website (latest postss) ✔
+
+- forms for anyThing for the school and form application ✔
+- see applications

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { server } from "../utlits/Variable";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -213,9 +213,8 @@ const ApiContext = ({ children }) => {
       setProfile(res.data);
     } catch (error) {
       console.log(error);
-      if (error.response.status == 403 && !noNavigate) {
-        localStorage.clear();
-        navigate("/auth/log-in/");
+      if (error?.response?.status == 403 || error?.response?.status == 401) {
+        setProfile({ error: "No User" });
       }
     } finally {
     }
@@ -358,6 +357,262 @@ const ApiContext = ({ children }) => {
     }
   };
 
+  // forms
+  const [formTypes, setFormTypes] = React.useState([]);
+  const [formTypesLoading, setFormTypesLoading] = useState(false);
+  const getFormTypes = async () => {
+    setFormTypesLoading(true);
+    try {
+      const res = await axios.get(`${server}api/v1/form-types/`, headers);
+      setFormTypes(res.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setFormTypesLoading(false);
+    }
+  };
+
+  const createFormType = async ({ data = {} }) => {
+    setFormTypesLoading(true);
+    try {
+      const res = await axios.post(
+        `${server}api/v1/form-types/`,
+        data,
+        headers
+      );
+      if (res.data.id) {
+        success("تم انشاء نوع الاستطلاع");
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormTypesLoading(false);
+    }
+  };
+
+  const updateFormType = async ({ data = {}, id = "" }) => {
+    setFormTypesLoading(true);
+    try {
+      const res = await axios.put(
+        `${server}api/v1/form-type/${id}/`,
+        data,
+        headers
+      );
+      if (res?.data?.id) {
+        success("تم تحديث نوع الاستطلاع");
+      } else {
+        console.log("error in create school profile");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormTypesLoading(false);
+    }
+  };
+
+  const deleteFormType = async (id) => {
+    setFormTypesLoading(true);
+    try {
+      const res = await axios.delete(
+        `${server}api/v1/form-type/${id}/`,
+        headers
+      );
+      if (res.data.id) {
+        success("تم حذف نوع الاستطلاع");
+        getFormTypes();
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormTypesLoading(false);
+    }
+  };
+
+  const [forms, setForms] = React.useState([]);
+  const [formsLoading, setFormsLoading] = React.useState(false);
+
+  const getForms = async () => {
+    setFormsLoading(true);
+    try {
+      const res = await axios.get(`${server}api/v1/forms/`, headers);
+      setForms(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const createForm = async ({ data = {}, setOpen = false }) => {
+    setFormsLoading(true);
+    try {
+      const res = await axios.post(`${server}api/v1/forms/`, data, headers);
+      if (res.data.id) {
+        success("تم انشاء استطلاع, قم باضافة الحقول المطلوبة");
+        if (setOpen) setOpen(false);
+        getForms();
+        return await res.data;
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const [form, setForm] = React.useState({});
+  const getForm = async ({ id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const res = await axios.get(`${server}api/v1/form/${id}/`, headers);
+      setForm(res.data);
+      return await res.data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const updateForm = async ({ data = {}, id = "", setOpen = false }) => {
+    setFormsLoading(true);
+    try {
+      const res = await axios.put(`${server}api/v1/form/${id}/`, data, headers);
+      if (res?.data?.id) {
+        success("تم تحديث استطلاع");
+        if (setOpen) setOpen(false);
+        getForms();
+      } else {
+        console.log("error in create school profile");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const deleteForm = async (id) => {
+    setFormsLoading(true);
+    try {
+      const res = await axios.delete(`${server}api/v1/form/${id}/`, headers);
+      if (res.data.id) {
+        success("تم حذف استطلاع");
+        getForms();
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const [formFields, setFormFields] = React.useState([]);
+  const [formFieldsLoading, setFormFieldsLoading] = React.useState(false);
+
+  const getFormFields = async ({ id = "" }) => {
+    setFormFieldsLoading(true);
+    try {
+      const res = await axios.get(
+        `${server}api/v1/form-fields/?form=${id}`,
+        headers
+      );
+      setFormFields(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormFieldsLoading(false);
+    }
+  };
+
+  const createFormField = async ({ data = {}, setOpen = false }) => {
+    setFormFieldsLoading(true);
+    try {
+      const res = await axios.post(
+        `${server}api/v1/form-fields/`,
+        data,
+        headers
+      );
+      if (res.data.id) {
+        success("تم انشاء حقل الاستطلاع");
+        if (setOpen) setOpen(false);
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const updateFormField = async ({ data = {}, id = "", setOpen = false }) => {
+    setFormFieldsLoading(true);
+    try {
+      const res = await axios.put(
+        `${server}api/v1/form-field/${id}/`,
+        data,
+        headers
+      );
+      if (res?.data?.id) {
+        success("تم تحديث حقل الاستطلاع");
+        if (setOpen) setOpen(false);
+      } else {
+        console.log("error in create school profile");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormFieldsLoading(false);
+    }
+  };
+
+  const deleteFormField = async (id) => {
+    setFormFieldsLoading(true);
+    try {
+      const res = await axios.delete(
+        `${server}api/v1/form-field/${id}/`,
+        headers
+      );
+      if (res.data.id) {
+        success("تم حذف حقل الاستطلاع");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormFieldsLoading(false);
+    }
+  };
+
+  const createFormApplicatipn = async ({ data = {}, setOpen = false }) => {
+    setFormFieldsLoading(true);
+    try {
+      const res = await axios.post(
+        `${server}api/v1/form-applications/`,
+        data,
+        headers
+      );
+      if (res.data.id) {
+        success("تم انشاء استطلاع");
+        navigate(`/redirect/`);
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <ApiContextProvider.Provider
       value={{
@@ -365,9 +620,33 @@ const ApiContext = ({ children }) => {
         navigate,
         success,
         error,
-
         singUp,
         logIn,
+
+        createFormApplicatipn,
+
+        formFields,
+        formFieldsLoading,
+        getFormFields,
+        createFormField,
+        updateFormField,
+        deleteFormField,
+
+        forms,
+        formsLoading,
+        getForms,
+        form,
+        getForm,
+        createForm,
+        updateForm,
+        deleteForm,
+
+        formTypes,
+        formTypesLoading,
+        getFormTypes,
+        createFormType,
+        updateFormType,
+        deleteFormType,
 
         posts,
         postsLoading,

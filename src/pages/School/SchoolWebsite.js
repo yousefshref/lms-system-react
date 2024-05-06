@@ -7,7 +7,8 @@ import { useDrop } from "react-dnd";
 import { PiTextT } from "react-icons/pi";
 import AddedElement from "../../components/AddedElement";
 import axios from "axios";
-import { BiArrowBack } from "react-icons/bi";
+import { BiArrowBack, BiSpaceBar } from "react-icons/bi";
+import { MdPostAdd } from "react-icons/md";
 
 const SchoolWebsite = () => {
   const apiContext = useContext(ApiContextProvider);
@@ -53,16 +54,20 @@ const SchoolWebsite = () => {
       width: 300,
       imagePosition: "",
     },
-    // {
-    //   id: 2,
-    //   title: "",
-    //   check: "image",
-    //   icon: <ImImage />,
-    //   value:
-    //     "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg",
-    //   width: 300,
-    //   imagePosition: "",
-    // },
+    {
+      id: 3,
+      title: "مسافة من الاسفل",
+      check: "space",
+      icon: <BiSpaceBar />,
+      value: "",
+    },
+    {
+      id: 4,
+      title: "جزء من المنشورات",
+      check: "posts",
+      icon: <MdPostAdd />,
+      value: [],
+    },
   ];
 
   const [websiteHolder, setWebsiteHolder] = React.useState([]);
@@ -93,7 +98,7 @@ const SchoolWebsite = () => {
   };
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ["image", "text"],
+    accept: ["image", "text", "space", "posts"],
     drop: (element) => addItemToHolder(element),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -178,7 +183,10 @@ const SchoolWebsite = () => {
             </>
           )}
 
-          <div ref={drop} className="website p-3 rounded-xl bg-white shadow-md">
+          <div
+            ref={drop}
+            className="website flex flex-col p-3 rounded-xl bg-white shadow-md"
+          >
             {websiteHolder?.length > 0 ? (
               websiteHolder?.map((element) => (
                 <AddedElement
