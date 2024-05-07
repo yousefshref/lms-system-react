@@ -12,6 +12,7 @@ import SchoolForms from "./pages/School/SchoolForms";
 import FormDetails from "./components/FormDetails";
 import SchoolStudents from "./pages/School/SchoolStudents";
 import AuthWithPhone from "./pages/AuthWithPhone";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -28,7 +29,11 @@ function App() {
 
       <Route
         path="/school/:schoolName/:schoolId/profile/"
-        element={<SchoolProfile />}
+        element={
+          <PrivateRoute>
+            <SchoolProfile />
+          </PrivateRoute>
+        }
       />
 
       <Route
@@ -38,18 +43,30 @@ function App() {
 
       <Route
         path="/school/:schoolName/:schoolId/posts/"
-        element={<SchoolPosts />}
+        element={
+          <PrivateRoute>
+            <SchoolPosts />
+          </PrivateRoute>
+        }
       />
 
       <Route
         path="/school/:schoolName/:schoolId/forms/"
-        element={<SchoolForms />}
+        element={
+          <PrivateRoute>
+            <SchoolForms />
+          </PrivateRoute>
+        }
       />
       <Route path="/form/:formId/" element={<FormDetails />} />
 
       <Route
         path="/school/:schoolName/:schoolId/students/"
-        element={<SchoolStudents />}
+        element={
+          <PrivateRoute>
+            <SchoolStudents />
+          </PrivateRoute>
+        }
       />
     </Routes>
   );

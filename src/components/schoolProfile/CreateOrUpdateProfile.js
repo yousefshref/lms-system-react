@@ -14,13 +14,14 @@ const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
   }, []);
 
   const student = apiContext?.student;
-  // useEffect(() => {
-  //   if (localStorage.getItem("phone")) {
-  //     apiContext?.getStudent({ phone: localStorage.getItem("phone") });
-  //   } else {
-  //     apiContext?.navigate("/auth/with-phone/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (localStorage.getItem("phone")) {
+      apiContext?.getStudent({ phone: localStorage.getItem("phone") });
+    } else {
+      if (!localStorage.getItem("token"))
+        apiContext?.navigate("/auth/with-phone/");
+    }
+  }, []);
 
   const allSubjects = apiContext.subjects;
   useEffect(() => {
@@ -130,7 +131,7 @@ const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
                 }}
                 key={level.id}
                 className={`${
-                  levels.includes(level.id) ? "bg-indigo-600 text-white" : ""
+                  levels?.includes(level.id) ? "bg-indigo-600 text-white" : ""
                 } flex text-xs px-5 cursor-pointer transition-all active:bg-indigo-500 hover:bg-indigo-600 hover:text-white rounded-full items-center p-2 bg-indigo-200`}
               >
                 <p>{level.name}</p>
@@ -157,7 +158,7 @@ const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
                 }}
                 key={subject.id}
                 className={`${
-                  subjects.includes(subject.id)
+                  subjects?.includes(subject.id)
                     ? "bg-indigo-600 text-white"
                     : ""
                 } flex text-xs px-5 cursor-pointer transition-all active:bg-indigo-500 hover:bg-indigo-600 hover:text-white rounded-full items-center p-2 bg-indigo-200`}
