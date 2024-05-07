@@ -6,4 +6,6 @@
 - display posts in website (latest postss) ✔
 
 - forms for anyThing for the school and form application ✔
-- see applications
+- add students ✔
+- add student infos for every form application ✔
+- see applications ✔

@@ -4,11 +4,10 @@ import { ApiContextProvider } from "../context/ApiContext";
 const MainPage = () => {
   const apiContext = useContext(ApiContextProvider);
 
-  const profile = apiContext?.profile;
-  const loading = apiContext?.profileLoading;
+  const school = apiContext?.school;
 
   useEffect(() => {
-    apiContext?.checkUser({});
+    apiContext?.getSchool();
   }, []);
 
   return (
@@ -25,7 +24,7 @@ const MainPage = () => {
       <button
         onClick={() =>
           apiContext?.navigate(
-            `/school/${apiContext?.profile?.school?.user_details?.username}/${apiContext?.profile?.school?.user_details?.id}/profile`
+            `/school/${school?.user_details?.username}/${school?.user_details?.id}/profile`
           )
         }
         className="btn-primary"

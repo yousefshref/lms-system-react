@@ -6,23 +6,30 @@ import LoadingScreen from "../components/LoadingScreen";
 const Redirect = () => {
   const apiContext = useContext(ApiContextProvider);
 
-  const profile = apiContext?.profile;
   const loading = apiContext?.profileLoading;
 
   const profileCreation = apiContext?.createProfileSuccess;
+
   useEffect(() => {
-    apiContext?.checkUser({});
+    apiContext?.getSchool().then((e) => {
+      if (e?.id) {
+        apiContext?.navigate(`/school/${e?.name}/${e?.id}/profile/`);
+      }
+    });
   }, [profileCreation]);
 
-  if (profile?.error && !loading) {
-    apiContext?.navigate(`/check-profile/`);
-  }
-
-  if (profile?.school && !loading) {
-    apiContext?.navigate(
-      `/school/${profile?.school?.user_details?.username}/${profile?.school?.user_details?.id}/profile/`
-    );
-  }
+  useEffect(() => {
+    apiContext
+      ?.getStudent({ phone: localStorage.getItem("phone"), noNav: true })
+      .then((e) => {
+        if (e?.id) {
+          apiContext?.navigate(`/student/${e?.name}/${e?.id}/profile/`);
+        } else {
+          if (!localStorage.getItem("token"))
+            apiContext?.navigate(`/auth/with-phone/`);
+        }
+      });
+  }, [profileCreation]);
 
   if (loading) return <LoadingScreen />;
 };

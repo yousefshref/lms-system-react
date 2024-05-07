@@ -11,27 +11,27 @@ import ChooseProfile from "../../components/ChooseProfile";
 const SchoolProfile = () => {
   const apiContext = useContext(ApiContextProvider);
 
-  const profile = apiContext?.profile?.school;
+  const school = apiContext?.school;
   const loading = apiContext?.profileLoading;
   useEffect(() => {
-    apiContext?.checkUser({});
+    apiContext?.getSchool();
   }, [apiContext?.createProfileSuccess]);
 
   const [openEdit, setOpenEdit] = React.useState(false);
 
   useEffect(() => {
     if (
-      (!profile?.profile_image ||
-        !profile?.name ||
-        profile?.levels?.length === 0 ||
-        profile?.subjects?.length === 0) &&
-      profile?.id
+      (!school?.profile_image ||
+        !school?.name ||
+        school?.levels?.length === 0 ||
+        school?.subjects?.length === 0) &&
+      school?.id
     ) {
       setOpenEdit(true);
     }
-  }, [profile, openEdit]);
+  }, [school, openEdit]);
 
-  if (!profile && !apiContext?.profileLoading) {
+  if (!school && !apiContext?.profileLoading) {
     return <ChooseProfile />;
   }
 
@@ -41,7 +41,7 @@ const SchoolProfile = () => {
         <LoadingScreen />
       ) : (
         <>
-          {/* profile and info */}
+          {/* school and info */}
           <div className="w-full p-4 rounded-xl bg-white shadow-md">
             {loading ? (
               <div className="w-full flex justify-center">
@@ -52,12 +52,12 @@ const SchoolProfile = () => {
                 <div className="w-full max-w-lg mx-auto">
                   <img
                     className="rounded-xl"
-                    alt={profile?.name}
-                    src={server + profile?.profile_image}
+                    alt={school?.name}
+                    src={server + school?.profile_image}
                   />
                 </div>
                 <div className="relative flex flex-col gap-2 p-3 rounded-xl bg-indigo-400 bg-opacity-50">
-                  {/* edit profile */}
+                  {/* edit school */}
                   <span
                     onClick={() => setOpenEdit(!openEdit)}
                     className="absolute left-3 top-3 cursor-pointer"
@@ -69,14 +69,14 @@ const SchoolProfile = () => {
                     open={openEdit}
                     setOpen={setOpenEdit}
                   />
-                  <h1 className="text-3xl">{profile?.name}</h1>
+                  <h1 className="text-3xl">{school?.name}</h1>
                   <p className="text-sm">
-                    {profile?.level_details
+                    {school?.level_details
                       ?.map((level) => level.name)
                       ?.join(", ")}
                   </p>
                   <p className="text-sm">
-                    {profile?.subject_details
+                    {school?.subject_details
                       ?.map((level) => level.name)
                       ?.join(", ")}
                   </p>

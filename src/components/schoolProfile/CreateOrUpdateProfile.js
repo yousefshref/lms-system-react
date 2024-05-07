@@ -6,11 +6,20 @@ import { server } from "../../utlits/Variable";
 const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
   const apiContext = useContext(ApiContextProvider);
 
-  const profile = apiContext?.profile;
+  const school = apiContext?.school;
   const profileLoading = apiContext?.profileLoading;
 
   useEffect(() => {
-    apiContext?.checkUser({});
+    apiContext?.getSchool();
+  }, []);
+
+  const student = apiContext?.student;
+  useEffect(() => {
+    if (localStorage.getItem("phone")) {
+      apiContext?.getStudent({ phone: localStorage.getItem("phone") });
+    } else {
+      apiContext?.navigate("/auth/with-phone/");
+    }
   }, []);
 
   const allSubjects = apiContext.subjects;
@@ -24,40 +33,16 @@ const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
   }, []);
 
   const [profileImage, setProfileImage] = React.useState(
-    profile?.school
-      ? profile?.school?.profile_image
-      : profile?.student
-      ? profile?.student?.student?.profile_image
-      : profile?.teacher
-      ? profile?.teacher?.teacher?.profile_image
-      : ""
+    school ? school?.profile_image : student ? student?.profile_image : ""
   );
   const [name, setName] = React.useState(
-    profile?.school
-      ? profile?.school?.name
-      : profile?.student
-      ? profile?.student?.student?.name
-      : profile?.teacher
-      ? profile?.teacher?.teacher?.name
-      : ""
+    school ? school?.name : student ? student?.name : ""
   );
   const [levels, setLevels] = React.useState(
-    profile?.school
-      ? profile?.school?.levels
-      : profile?.student
-      ? profile?.student?.student?.levels
-      : profile?.teacher
-      ? profile?.teacher?.teacher?.levels
-      : []
+    school ? school?.levels : student ? student?.levels : []
   );
   const [subjects, setSubjects] = React.useState(
-    profile?.school
-      ? profile?.school?.subjects
-      : profile?.student
-      ? profile?.student?.student?.subjects
-      : profile?.teacher
-      ? profile?.teacher?.teacher?.subjects
-      : []
+    school ? school?.subjects : student ? student?.subjects : []
   );
 
   const updateProfile = () => {

@@ -204,19 +204,37 @@ const ApiContext = ({ children }) => {
     }
   };
 
-  const [profile, setProfile] = React.useState({});
+  const [school, setSchool] = React.useState({});
   const [profileLoading, setProfileLoading] = React.useState(false);
 
-  const checkUser = async ({ noNavigate = false }) => {
+  const getSchool = async () => {
+    setProfileLoading(true);
     try {
-      const res = await axios.get(`${server}api/v1/check-user/`, headers);
-      setProfile(res.data);
+      const res = await axios.get(`${server}api/v1/school/`, headers);
+      setSchool(res.data);
+      return await res.data;
     } catch (error) {
       console.log(error);
-      if (error?.response?.status == 403 || error?.response?.status == 401) {
-        setProfile({ error: "No User" });
-      }
     } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const [student, setStudent] = React.useState({});
+  const getStudent = async ({ phone, noNav = false }) => {
+    setProfileLoading(true);
+    try {
+      const res = await axios.get(
+        `${server}api/v1/student/?phone=${phone ?? ""}`,
+        headers
+      );
+      setStudent(res.data);
+      return await res.data;
+    } catch (error) {
+      console.log(error);
+      if (!noNav) navigate("/auth/with-phone/");
+    } finally {
+      setProfileLoading(false);
     }
   };
 
@@ -613,6 +631,97 @@ const ApiContext = ({ children }) => {
     }
   };
 
+  // students
+  const [students, setStudents] = useState([]);
+  const [studentLoading, setStudentLoading] = useState(false);
+
+  const getStudents = async () => {
+    setStudentLoading(true);
+    try {
+      const res = await axios.get(`${server}api/v1/students/`, headers);
+      setStudents(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStudentLoading(false);
+    }
+  };
+
+  const createStudent = async ({ data = {}, setOpen = false }) => {
+    setStudentLoading(true);
+    try {
+      const res = await axios.post(`${server}api/v1/students/`, data, headers);
+      if (res.data.id) {
+        success("تم انشاء طالب");
+        if (setOpen) setOpen(false);
+        getStudents();
+      } else {
+        Object.entries(res.data).forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+        console.log("error in create student");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStudentLoading(false);
+    }
+  };
+
+  const updateStudent = async ({ data = {}, id = "", setOpen = false }) => {
+    setStudentLoading(true);
+    try {
+      const res = await axios.put(
+        `${server}api/v1/student/${id}/`,
+        data,
+        headers
+      );
+      if (res?.data?.id) {
+        success("تم تحديث طالب");
+        if (setOpen) setOpen(false);
+        getStudents();
+      } else {
+        console.log("error in create school profile");
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStudentLoading(false);
+    }
+  };
+
+  const deleteStudent = async (id) => {
+    setStudentLoading(true);
+    try {
+      const res = await axios.delete(`${server}api/v1/student/${id}/`, headers);
+      success("تم حذف طالب");
+      getStudents();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStudentLoading(false);
+    }
+  };
+
+  // form applications
+  const [formApplications, setFormApplications] = useState([]);
+  const [formAppLoading, setFormAppLoading] = useState(false);
+
+  const getFormApplications = async () => {
+    setFormAppLoading(true);
+    try {
+      const res = await axios.get(
+        `${server}api/v1/form-applications/`,
+        headers
+      );
+      setFormApplications(res.data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormAppLoading(false);
+    }
+  };
+
   return (
     <ApiContextProvider.Provider
       value={{
@@ -622,6 +731,17 @@ const ApiContext = ({ children }) => {
         error,
         singUp,
         logIn,
+
+        formApplications,
+        formAppLoading,
+        getFormApplications,
+
+        students,
+        studentLoading,
+        getStudents,
+        createStudent,
+        updateStudent,
+        deleteStudent,
 
         createFormApplicatipn,
 
@@ -654,9 +774,12 @@ const ApiContext = ({ children }) => {
         createPost,
         deletePost,
 
-        profile,
+        school,
         profileLoading,
-        checkUser,
+        getSchool,
+
+        student,
+        getStudent,
 
         loading,
 

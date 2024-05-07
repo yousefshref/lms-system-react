@@ -1,15 +1,16 @@
 import React, { useContext, useEffect } from "react";
 import { ApiContextProvider } from "../context/ApiContext";
 import LoadingScreen from "./LoadingScreen";
+import { Modal } from "antd";
 
 const ChooseProfile = () => {
   const apiContext = useContext(ApiContextProvider);
 
-  const profile = apiContext?.profile;
+  const school = apiContext?.school;
   const loading = apiContext?.profileLoading;
 
   useEffect(() => {
-    apiContext?.checkUser({});
+    apiContext?.getSchool();
   }, [apiContext?.createProfileSuccess]);
 
   const createProfile = ({ type, data }) => {
@@ -21,16 +22,19 @@ const ChooseProfile = () => {
   };
 
   useEffect(() => {
-    if (profile?.error && !loading) {
-      apiContext?.navigate(`/check-profile/`);
-    }
-
-    if (profile?.school && !loading) {
+    if (school && !loading) {
       apiContext?.navigate(
-        `/school/${profile?.school?.user_details?.username}/${profile?.school?.user_details?.id}/profile/`
+        `/school/${school?.user_details?.username}/${school?.user_details?.id}/profile/`
       );
     }
-  }, [profile, loading]);
+  }, [school, loading]);
+
+  const [openAddStudent, setOpenAddStudent] = React.useState(false);
+  const [studentPhone, setStudentPhone] = React.useState("");
+
+  const getSchool = () => {
+    apiContext?.getSchool();
+  };
 
   return (
     <div className="flex flex-col gap-5 h-[100vh] p-4 text-center justify-center">
@@ -53,9 +57,28 @@ const ChooseProfile = () => {
         <div className="p-3 rounded-xl bg-indigo-200 cursor-pointer hover:bg-blue-200 transition-all flex flex-col md:w-1/3 text-center">
           <p>معلم</p>
         </div>
-        <div className="p-3 rounded-xl bg-indigo-200 cursor-pointer hover:bg-blue-200 transition-all flex flex-col md:w-1/3 text-center">
+
+        <div
+          onClick={() => setOpenAddStudent(true)}
+          className="p-3 rounded-xl bg-indigo-200 cursor-pointer hover:bg-blue-200 transition-all flex flex-col md:w-1/3 text-center"
+        >
           <p>طالب</p>
         </div>
+
+        <Modal
+          open={openAddStudent}
+          onOk={() => getSchool()}
+          onCancel={() => setOpenAddStudent(false)}
+          centered
+        >
+          <div className="flex flex-col gap-2">
+            <p>رقم هاتف الطالب او ولي الامر</p>
+            <input
+              onChange={(e) => setStudentPhone(e.target.value)}
+              value={studentPhone}
+            />
+          </div>
+        </Modal>
       </div>
     </div>
   );

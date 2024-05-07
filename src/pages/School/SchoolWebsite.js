@@ -16,13 +16,11 @@ const SchoolWebsite = () => {
   const url = window.location.href;
   const id = url.split("/").reverse()[1];
 
-  const profile = apiContext?.profile;
+  const school = apiContext?.school;
   const loading = apiContext?.profileLoading;
 
   useEffect(() => {
-    apiContext?.checkUser({
-      noNavigate: true,
-    });
+    apiContext?.getSchool();
   }, []);
 
   const website = apiContext?.website;
@@ -141,7 +139,7 @@ const SchoolWebsite = () => {
       });
   };
 
-  const is_admin = profile?.school?.user == id;
+  const is_admin = school?.user == id;
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -156,7 +154,7 @@ const SchoolWebsite = () => {
                 <span
                   onClick={() =>
                     apiContext?.navigate(
-                      `/school/${profile?.school?.user_details?.username}/${profile?.school?.user_details?.id}/profile/`
+                      `/school/${school?.user_details?.username}/${school?.user_details?.id}/profile/`
                     )
                   }
                   className="absolute left-3 cursor-pointer my-auto"

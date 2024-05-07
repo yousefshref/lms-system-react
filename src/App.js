@@ -10,14 +10,17 @@ import ChooseProfile from "./components/ChooseProfile";
 import SchoolPosts from "./pages/School/SchoolPosts";
 import SchoolForms from "./pages/School/SchoolForms";
 import FormDetails from "./components/FormDetails";
+import SchoolStudents from "./pages/School/SchoolStudents";
+import AuthWithPhone from "./pages/AuthWithPhone";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Redirect />} />
 
-      <Route path="/auth/sign-up/" element={<SignUp />} />
+      {/* <Route path="/auth/sign-up/" element={<SignUp />} /> */}
       <Route path="/auth/log-in/" element={<LogIn />} />
+      <Route path="/auth/with-phone/" element={<AuthWithPhone />} />
 
       <Route path="/redirect/" element={<Redirect />} />
 
@@ -42,8 +45,12 @@ function App() {
         path="/school/:schoolName/:schoolId/forms/"
         element={<SchoolForms />}
       />
-
       <Route path="/form/:formId/" element={<FormDetails />} />
+
+      <Route
+        path="/school/:schoolName/:schoolId/students/"
+        element={<SchoolStudents />}
+      />
     </Routes>
   );
 }
