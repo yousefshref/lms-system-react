@@ -14,13 +14,13 @@ const CreateOrUpdateProfile = ({ open, setOpen, create, type }) => {
   }, []);
 
   const student = apiContext?.student;
-  useEffect(() => {
-    if (localStorage.getItem("phone")) {
-      apiContext?.getStudent({ phone: localStorage.getItem("phone") });
-    } else {
-      apiContext?.navigate("/auth/with-phone/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem("phone")) {
+  //     apiContext?.getStudent({ phone: localStorage.getItem("phone") });
+  //   } else {
+  //     apiContext?.navigate("/auth/with-phone/");
+  //   }
+  // }, []);
 
   const allSubjects = apiContext.subjects;
   useEffect(() => {

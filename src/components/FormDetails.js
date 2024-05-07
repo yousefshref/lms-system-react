@@ -8,12 +8,15 @@ const FormDetails = () => {
 
   const student = apiContext?.student;
   useEffect(() => {
-    apiContext
-      ?.getStudent({ phone: localStorage.getItem("phone"), noNav: true })
-      .then((e) => {
-        if (e?.notExist && !localStorage.getItem("token"))
-          apiContext?.navigate("/auth/with-phone/");
+    if (localStorage.getItem("phone")) {
+      apiContext?.getStudent({
+        phone: localStorage.getItem("phone"),
+        noNav: true,
       });
+    } else {
+      if (!localStorage?.getItem("token"))
+        apiContext?.navigate("/auth/with-phone/");
+    }
   }, []);
 
   const url = window.location.href;

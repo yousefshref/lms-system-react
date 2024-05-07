@@ -208,21 +208,19 @@ const ApiContext = ({ children }) => {
   const [profileLoading, setProfileLoading] = React.useState(false);
 
   const getSchool = async () => {
-    setProfileLoading(true);
     try {
       const res = await axios.get(`${server}api/v1/school/`, headers);
       setSchool(res.data);
       return await res.data;
     } catch (error) {
       console.log(error);
+      setSchool({ error: true });
     } finally {
-      setProfileLoading(false);
     }
   };
 
   const [student, setStudent] = React.useState({});
   const getStudent = async ({ phone, noNav = false }) => {
-    setProfileLoading(true);
     try {
       const res = await axios.get(
         `${server}api/v1/student/?phone=${phone ?? ""}`,
@@ -232,9 +230,9 @@ const ApiContext = ({ children }) => {
       return await res.data;
     } catch (error) {
       console.log(error);
-      if (!noNav) navigate("/auth/with-phone/");
+      if (!noNav && !localStorage.getItem("phone"))
+        navigate("/auth/with-phone/");
     } finally {
-      setProfileLoading(false);
     }
   };
 

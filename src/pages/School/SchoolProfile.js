@@ -15,7 +15,7 @@ const SchoolProfile = () => {
   const loading = apiContext?.profileLoading;
   useEffect(() => {
     apiContext?.getSchool();
-  }, [apiContext?.createProfileSuccess]);
+  }, []);
 
   const [openEdit, setOpenEdit] = React.useState(false);
 

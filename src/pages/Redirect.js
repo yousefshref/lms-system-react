@@ -5,31 +5,23 @@ import LoadingScreen from "../components/LoadingScreen";
 
 const Redirect = () => {
   const apiContext = useContext(ApiContextProvider);
-
   const loading = apiContext?.profileLoading;
-
-  const profileCreation = apiContext?.createProfileSuccess;
 
   useEffect(() => {
     apiContext?.getSchool().then((e) => {
       if (e?.id) {
-        apiContext?.navigate(`/school/${e?.name}/${e?.id}/profile/`);
+        apiContext?.navigate(
+          `/school/${e?.user_details?.username}/${e?.user_details?.id}/profile/`
+        );
+      } else {
+        if (localStorage.getItem("phone")) {
+          apiContext?.getStudent({ phone: localStorage.getItem("phone") });
+        } else {
+          apiContext?.navigate("/auth/with-phone/");
+        }
       }
     });
-  }, [profileCreation]);
-
-  useEffect(() => {
-    apiContext
-      ?.getStudent({ phone: localStorage.getItem("phone"), noNav: true })
-      .then((e) => {
-        if (e?.id) {
-          apiContext?.navigate(`/student/${e?.name}/${e?.id}/profile/`);
-        } else {
-          if (!localStorage.getItem("token"))
-            apiContext?.navigate(`/auth/with-phone/`);
-        }
-      });
-  }, [profileCreation]);
+  }, []);
 
   if (loading) return <LoadingScreen />;
 };
