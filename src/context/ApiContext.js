@@ -451,7 +451,7 @@ const ApiContext = ({ children }) => {
   const [forms, setForms] = React.useState([]);
   const [formsLoading, setFormsLoading] = React.useState(false);
 
-  const getForms = async () => {
+  const getForms = async ({}) => {
     setFormsLoading(true);
     try {
       const res = await axios.get(`${server}api/v1/forms/`, headers);
@@ -470,7 +470,7 @@ const ApiContext = ({ children }) => {
       if (res.data.id) {
         success("تم انشاء استطلاع, قم باضافة الحقول المطلوبة");
         if (setOpen) setOpen(false);
-        getForms();
+        getForms({});
         return await res.data;
       } else {
         Object.entries(res.data).forEach(([key, value]) => {
@@ -505,7 +505,7 @@ const ApiContext = ({ children }) => {
       if (res?.data?.id) {
         success("تم تحديث استطلاع");
         if (setOpen) setOpen(false);
-        getForms();
+        getForms({});
       } else {
         console.log("error in create school profile");
       }
@@ -522,7 +522,7 @@ const ApiContext = ({ children }) => {
       const res = await axios.delete(`${server}api/v1/form/${id}/`, headers);
       if (res.data.id) {
         success("تم حذف استطلاع");
-        getForms();
+        getForms({});
       }
     } catch (err) {
       console.log(err);
@@ -705,11 +705,11 @@ const ApiContext = ({ children }) => {
   const [formApplications, setFormApplications] = useState([]);
   const [formAppLoading, setFormAppLoading] = useState(false);
 
-  const getFormApplications = async () => {
+  const getFormApplications = async ({ form = "", phone = "" }) => {
     setFormAppLoading(true);
     try {
       const res = await axios.get(
-        `${server}api/v1/form-applications/`,
+        `${server}api/v1/form-applications/?form=${form}&phone=${phone}`,
         headers
       );
       setFormApplications(res.data);

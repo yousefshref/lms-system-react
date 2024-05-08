@@ -43,7 +43,35 @@ const SchoolStudents = () => {
         />
       </div>
 
-      <div className="top flex gap-5 bg-white overflow-x-scroll text-xs p-2 justify-between w-full max-w-full">
+      <table>
+        <thead className="bg-white rounded-xl">
+          <tr className="text-xs">
+            <th className="text-start p-2">الأسم</th>
+            <th className="text-start p-2">رقم الهاتف</th>
+            <th className="text-start p-2">البريد الالكرتوني</th>
+            <th className="text-start p-2">تاريخ الميلاد</th>
+            <th className="text-start p-2">المستوي الدراسي</th>
+            <th className="text-start p-2">رقم هاتف ولي الامر</th>
+            <th className="text-start p-2">التقديم عبر الانترنت</th>
+            <th className="text-start p-2">تم الانشاء في</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <div className="flex justify-center">
+              <Loading />
+            </div>
+          ) : students?.length > 0 ? (
+            students?.map((student, index) => (
+              <Student student={student} key={index} />
+            ))
+          ) : (
+            <p>لا يوجد بيانات اي طالب</p>
+          )}
+        </tbody>
+      </table>
+
+      {/* <div className="top flex gap-5 bg-white overflow-x-scroll text-xs p-2 justify-between w-full max-w-full">
         <div
           style={{ width: "130px", minWidth: "130px" }}
           className="my-auto flex flex-col gap-2"
@@ -76,7 +104,7 @@ const SchoolStudents = () => {
         ) : (
           <p>لا يوجد بيانات اي طالب</p>
         )}
-      </div>
+      </div> */}
     </DefaultLayout>
   );
 };

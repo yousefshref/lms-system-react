@@ -1,7 +1,6 @@
 - text (bold, size, center or left or right) ✔
 - image positions ✔
 
-
 - posts in the website ✔
 - display posts in website (latest postss) ✔
 
@@ -9,3 +8,23 @@
 - add students ✔
 - add student infos for every form application ✔
 - see applications ✔
+
+- see details of application ✔
+- search applications ✔
+- search on students
+
+- text inside image
+- change places
+- two slides
+- slides
+
+-student display style
+
+
+
+
+
+
+
+
+

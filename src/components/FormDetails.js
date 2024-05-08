@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { ApiContextProvider } from "../context/ApiContext";
 import Loading from "./Loading";
 import FormField from "./FormField";
+import CreateOrUpdateStudent from "./CreateOrUpdateStudent";
 
 const FormDetails = () => {
   const apiContext = useContext(ApiContextProvider);
@@ -14,8 +15,8 @@ const FormDetails = () => {
         noNav: true,
       });
     } else {
-      if (!localStorage?.getItem("token"))
-        apiContext?.navigate("/auth/with-phone/");
+      // if (!localStorage?.getItem("token"))
+      //   apiContext?.navigate("/auth/with-phone/");
     }
   }, []);
 
@@ -47,6 +48,10 @@ const FormDetails = () => {
     JsonData["المستوي الدراسي"] = student?.levels_details?.name;
     JsonData["رقم هاتف ولي الامر"] = student?.parent_phone;
 
+    JsonData["name"] = student?.name;
+    JsonData["phone"] = student?.phone;
+    JsonData["parent_phone"] = student?.parent_phone;
+
     const formData = new FormData();
     const data = JSON.stringify(JsonData);
 
@@ -57,6 +62,8 @@ const FormDetails = () => {
       data: formData,
     });
   };
+
+  const newStudent = form?.form_type_details?.name == "تقديم طلاب";
 
   return (
     <div className="p-5 rounded-xl bg-zinc-300 h-[100vh]">
@@ -73,9 +80,9 @@ const FormDetails = () => {
             </div>
             <hr />
             <div className="flex flex-col gap-2">
-              {!localStorage.getItem("token") ? (
+              {student?.id ? (
                 <>
-                  <p className="text-xl font-bold text-start">معلومات الطالب</p>
+                  <p className="text-xl font-bold text-start">معلومات الحساب</p>
                   <div className="flex flex-row gap-3  text-start">
                     <b style={{ minWidth: "130px" }}>الاسم: </b>
                     <p>{student?.name}</p>
@@ -111,7 +118,21 @@ const FormDetails = () => {
                     <p>{student?.address}</p>
                   </div>
                 </>
-              ) : null}
+              ) : (
+                <div className="flex flex-col gap-3">
+                  <b>ليس لديك حساب</b>
+                  <p>
+                    لو كنت مسجل بالفعل او لديك حساب يمكنك الذهاب الي{" "}
+                    <b
+                      onClick={() => apiContext.navigate("/login")}
+                      className="text-blue-500"
+                    >
+                      هنا اولا
+                    </b>{" "}
+                    ثم تأتي لاكمال الاستطلاع
+                  </p>
+                </div>
+              )}
             </div>
             <hr />
             <div className="fields flex flex-col gap-3">
@@ -119,9 +140,14 @@ const FormDetails = () => {
                 <div className="flex justify-center">
                   <Loading />
                 </div>
+              ) : newStudent ? (
+                <div className="flex flex-col gap-3">
+                  <CreateOrUpdateStudent new_student={true} open={true} />
+                </div>
               ) : fields?.length > 0 ? (
                 fields?.map((field) => (
                   <FormField
+                    new_student={newStudent}
                     setLoading={setLoadingSend}
                     data={JsonData}
                     field={field}

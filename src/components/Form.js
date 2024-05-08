@@ -13,14 +13,14 @@ const Form = ({ form }) => {
 
   const deleteForm = () => {
     apiContext?.deleteForm(form?.id).then(() => {
-      apiContext?.getForms();
+      apiContext?.getForms({});
     });
   };
 
   const [openFields, setOpenFields] = React.useState(false);
 
   return (
-    <div className="p-3 rounded-xl bg-white shadow-md h-fit flex flex-col xs:flex-row gap-3">
+    <div className="p-3 rounded-xl bg-white shadow-md h-fit flex flex-col xs:flex-row justify-between gap-3">
       <div className="xs:min-w-1/3 xs:w-1/3 xs:max-w-1/3 my-auto">
         <p>{form?.name}</p>
       </div>

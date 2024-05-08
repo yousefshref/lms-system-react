@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 
-const FormField = ({ field, data, setLoading }) => {
+const FormField = ({ field, data, setLoading, new_student }) => {
   return (
     <div className="flex flex-col text-start gap-1 p-3 rounded-xl bg-zinc-200">
       <p className="font-bold">{field?.name}</p>

@@ -4,7 +4,7 @@ import { ApiContextProvider } from "../context/ApiContext";
 import LoadingScreen from "./LoadingScreen";
 import { server } from "../utlits/Variable";
 
-const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
+const CreateOrUpdateStudent = ({ open, setOpen, student, new_student }) => {
   const apiContext = useContext(ApiContextProvider);
 
   const allLevels = apiContext?.levels;
@@ -25,6 +25,21 @@ const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
     student?.parent_phone || ""
   );
   const [address, setAddress] = React.useState(student?.address || "");
+  const [isOnline, setIsOnline] = React.useState(student?.is_online || "");
+
+  useEffect(() => {
+    if (student) {
+      setProfileImage(student?.profile_image || "");
+      setName(student?.name || "");
+      setPhone(student?.phone || "");
+      setEmail(student?.email || "");
+      setBirthDate(student?.birth_date || "");
+      setLevels(student?.levels || []);
+      setParentPhone(student?.parent_phone || "");
+      setAddress(student?.address || "");
+      setIsOnline(student?.is_online || false);
+    }
+  }, [student]);
 
   const updateStudent = () => {
     const body = new FormData();
@@ -38,6 +53,7 @@ const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
     body.append("levels", levels);
     body.append("parent_phone", parent_phone);
     body.append("address", address);
+    body.append("is_online", isOnline);
 
     apiContext?.updateStudent({
       id: student?.id,
@@ -57,6 +73,7 @@ const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
     body.append("levels", levels);
     body.append("parent_phone", parent_phone);
     body.append("address", address);
+    body.append("is_online", isOnline);
 
     apiContext?.createStudent({
       data: body,
@@ -92,10 +109,18 @@ const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
             {profile_image && (
               <div className="flex flex-col gap-1 w-full max-w-[200px]">
                 {profile_image && typeof profile_image == "object" && (
-                  <img src={URL.createObjectURL(profile_image)} alt={name} />
+                  <img
+                    className="rounded-xl"
+                    src={URL.createObjectURL(profile_image)}
+                    alt={name}
+                  />
                 )}
                 {profile_image && typeof profile_image == "string" && (
-                  <img src={server + profile_image} alt={name} />
+                  <img
+                    className="rounded-xl"
+                    src={server + profile_image}
+                    alt={name}
+                  />
                 )}
                 <span
                   onClick={() => setProfileImage("")}
@@ -169,6 +194,14 @@ const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
+          </div>
+          <div className="flex flex-row gap-1 bg-white p-3 rounded-xl">
+            <input
+              type="checkbox"
+              checked={new_student ? true : isOnline}
+              onChange={(e) => setIsOnline(e.target.checked)}
+            />
+            <b>هل تم التقديم عبر الانترنت</b>
           </div>
         </div>
       )}

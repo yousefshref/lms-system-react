@@ -15,7 +15,7 @@ const SchoolForms = () => {
   const loading = apiContext?.formsLoading;
 
   useEffect(() => {
-    apiContext?.getForms();
+    apiContext?.getForms({});
   }, []);
 
   const [createOpen, setCreateOpen] = React.useState(false);

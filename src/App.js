@@ -13,13 +13,15 @@ import FormDetails from "./components/FormDetails";
 import SchoolStudents from "./pages/School/SchoolStudents";
 import AuthWithPhone from "./pages/AuthWithPhone";
 import PrivateRoute from "./components/PrivateRoute";
+import Test from "./pages/Test";
+import SchoolWebsiteV2 from "./pages/School/SchoolWebsiteV2";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Redirect />} />
 
-      {/* <Route path="/auth/sign-up/" element={<SignUp />} /> */}
+      <Route path="/auth/sign-up/" element={<SignUp />} />
       <Route path="/auth/log-in/" element={<LogIn />} />
       <Route path="/auth/with-phone/" element={<AuthWithPhone />} />
 
@@ -38,7 +40,7 @@ function App() {
 
       <Route
         path="/school/:schoolName/:schoolId/"
-        element={<SchoolWebsite />}
+        element={<SchoolWebsiteV2 />}
       />
 
       <Route
@@ -58,6 +60,7 @@ function App() {
           </PrivateRoute>
         }
       />
+
       <Route path="/form/:formId/" element={<FormDetails />} />
 
       <Route

@@ -10,58 +10,28 @@ const Student = ({ student }) => {
   const [openUpdateStudent, setOpenUpdateStudent] = React.useState(false);
 
   return (
-    <div className="p-3 rounded-xl bg-white shadow-md">
-      <div className="top flex gap-5 overflow-x-scroll p-1 justify-between w-full max-w-full">
-        <div
-          style={{ width: "130px", minWidth: "130px" }}
-          className="my-auto flex flex-col gap-2 text-xs"
-        >
-          <p>{student?.name}</p>
-          {student?.email && <p>{student?.email}</p>}
-          {student?.phone && <p>{student?.phone}</p>}
-          <p>{student?.levels_details[0]?.name}</p>
-        </div>
-        <div style={{ width: "130px", minWidth: "130px" }} className="my-auto">
-          <p>{student?.parent_phone}</p>
-        </div>
-        {student?.profile_image && (
-          <div
-            style={{ width: "130px", minWidth: "130px" }}
-            className="w-[100px] min-w-[100px] my-auto"
-          >
-            <img
-              className="w-full rounded-xl"
-              src={server + student?.profile_image}
-            />
-          </div>
-        )}
-      </div>
-
-      <div className="actions flex gap-4 justify-around">
-        <button
-          onClick={() => setOpenUpdateStudent(true)}
-          className="bg-sky-500 transition-all hover:bg-opacity-75 text-white p-2 text-xs rounded-lg w-[300px] max-w-[300px]"
-        >
-          تعديل
-        </button>
-        <CreateOrUpdateStudent
-          open={openUpdateStudent}
-          setOpen={setOpenUpdateStudent}
-          student={student}
-        />
-
-        <Popconfirm
-          title="هل تريد حذف هذا الطالب؟"
-          onConfirm={() => {
-            apiContext?.deleteStudent(student?.id);
-          }}
-        >
-          <button className="bg-red-500 transition-all hover:bg-opacity-75 text-white p-2 text-xs rounded-lg w-[300px] max-w-[300px]">
-            حذف
-          </button>
-        </Popconfirm>
-      </div>
-    </div>
+    <>
+      <tr
+        onClick={() => setOpenUpdateStudent(true)}
+        className="my-3 bg-white transition-all hover:bg-indigo-50 cursor-pointer"
+      >
+        <td className="p-2 text-xs">{student?.name}</td>
+        <td className="p-2 text-xs">{student?.phone}</td>
+        <td className="p-2 text-xs">{student?.email}</td>
+        <td className="p-2 text-xs">{student?.birth_date}</td>
+        <td className="p-2 text-xs">{student?.levels_details[0]?.name}</td>
+        <td className="p-2 text-xs">{student?.parent_phone}</td>
+        <td className="p-2 text-xs">{student?.is_online ? "نعم" : "لا"}</td>
+        <td className="p-2 text-xs">
+          {new Date(student?.created_at).toISOString().substring(0, 10)}
+        </td>
+      </tr>
+      <CreateOrUpdateStudent
+        open={openUpdateStudent}
+        setOpen={setOpenUpdateStudent}
+        student={student}
+      />
+    </>
   );
 };
 

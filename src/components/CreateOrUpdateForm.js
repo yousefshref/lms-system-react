@@ -25,7 +25,7 @@ const CreateOrUpdateForm = ({ open, setOpen, form }) => {
         setOpen: setOpen,
       })
       .then(() => {
-        apiContext?.getForms();
+        apiContext?.getForms({});
       });
   };
 

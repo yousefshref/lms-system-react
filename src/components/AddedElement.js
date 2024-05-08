@@ -5,6 +5,7 @@ import Post from "./Post";
 import Loading from "./Loading";
 import { CiWarning } from "react-icons/ci";
 import { useParams } from "react-router-dom";
+import { useDrop } from "react-dnd";
 
 const AddedElement = ({
   element,
@@ -78,9 +79,30 @@ const AddedElement = ({
 
   const params = useParams();
 
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: ["image", "text", "space", "posts"],
+    drop: (element) => console.log(element),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
     <div className="flex flex-col gap-4">
-      {element?.check === "space" && <br />}
+      {element?.check === "space" && is_admin ? (
+        <div
+          className={`p-4 m-1 cursor-pointer hover:bg-red-200 bg-red-50 flex justify-center transition-all rounded-xl`}
+          onClick={() => deleteElement()}
+        >
+          <BiTrash className="hover:bg-red-200 transition-all text-white" />
+        </div>
+      ) : null}
+      {element?.check === "space" && !is_admin ? (
+        <div
+          className={`p-4 m-1 flex justify-center transition-all rounded-xl`}
+        ></div>
+      ) : null}
+
       {element?.check === "posts" && (
         <div className="flex flex-col-reverse p-2 rounded-xl relative gap-2">
           {is_admin && (
@@ -125,8 +147,14 @@ const AddedElement = ({
           </div>
         </div>
       )}
+
       {element?.check === "image" && (
-        <div className="flex flex-col-reverse p-2 rounded-xl relative gap-2">
+        <div
+          ref={drop}
+          className={`flex flex-col-reverse p-2 transition-all rounded-xl relative gap-2 ${
+            isOver ? "opacity-50" : ""
+          }`}
+        >
           {is_admin && (
             <div className="flex gap-3">
               <span
@@ -186,6 +214,7 @@ const AddedElement = ({
           ) : null}
         </div>
       )}
+
       {element?.check === "text" && (
         <div className="flex p-2 rounded-xl relative gap-2">
           {is_admin && (
