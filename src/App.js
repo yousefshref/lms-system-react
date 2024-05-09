@@ -1,77 +1,47 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
-import MainPage from "./pages/MainPage";
-import SignUp from "./pages/authentication/SignUp";
-import LogIn from "./pages/authentication/LogIn";
-import Redirect from "./pages/Redirect";
-import SchoolProfile from "./pages/School/SchoolProfile";
-import SchoolWebsite from "./pages/School/SchoolWebsite";
-import ChooseProfile from "./components/ChooseProfile";
-import SchoolPosts from "./pages/School/SchoolPosts";
-import SchoolForms from "./pages/School/SchoolForms";
-import FormDetails from "./components/FormDetails";
-import SchoolStudents from "./pages/School/SchoolStudents";
-import AuthWithPhone from "./pages/AuthWithPhone";
-import PrivateRoute from "./components/PrivateRoute";
-import Test from "./pages/Test";
-import SchoolWebsiteV2 from "./pages/School/SchoolWebsiteV2";
+import Home from "./pages/Home";
+import Login from "./pages/Auth/Login";
+import { ApiContextProvider } from "./context/ApiContext";
+import Loading from "./components/Loading";
+import Admin from "./pages/Admin/Admin";
+import AdminStudents from "./pages/Admin/Students/AdminStudents";
+import AdminRoute from "./components/Routes/AdminRoute";
 
 function App() {
+  const apiContext = useContext(ApiContextProvider);
   return (
-    <Routes>
-      <Route path="/" element={<Redirect />} />
+    <>
+      {apiContext?.setApiMessage}
+      {apiContext?.loginLoading ||
+      apiContext?.studentsLoading ||
+      apiContext?.signUpLoading ||
+      apiContext?.usersLoading ? (
+        <Loading />
+      ) : null}
 
-      <Route path="/auth/sign-up/" element={<SignUp />} />
-      <Route path="/auth/log-in/" element={<LogIn />} />
-      <Route path="/auth/with-phone/" element={<AuthWithPhone />} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login/" element={<Login />} />
 
-      <Route path="/redirect/" element={<Redirect />} />
-
-      <Route path="/check-profile/" element={<ChooseProfile />} />
-
-      <Route
-        path="/school/:schoolName/:schoolId/profile/"
-        element={
-          <PrivateRoute>
-            <SchoolProfile />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/school/:schoolName/:schoolId/"
-        element={<SchoolWebsiteV2 />}
-      />
-
-      <Route
-        path="/school/:schoolName/:schoolId/posts/"
-        element={
-          <PrivateRoute>
-            <SchoolPosts />
-          </PrivateRoute>
-        }
-      />
-
-      <Route
-        path="/school/:schoolName/:schoolId/forms/"
-        element={
-          <PrivateRoute>
-            <SchoolForms />
-          </PrivateRoute>
-        }
-      />
-
-      <Route path="/form/:formId/" element={<FormDetails />} />
-
-      <Route
-        path="/school/:schoolName/:schoolId/students/"
-        element={
-          <PrivateRoute>
-            <SchoolStudents />
-          </PrivateRoute>
-        }
-      />
-    </Routes>
+        <Route
+          path="/admin/"
+          element={
+            <AdminRoute>
+              <Admin />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/students/"
+          element={
+            <AdminRoute>
+              <AdminStudents />
+            </AdminRoute>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
