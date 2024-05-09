@@ -7,6 +7,7 @@ import Loading from "./components/Loading";
 import Admin from "./pages/Admin/Admin";
 import AdminStudents from "./pages/Admin/Students/AdminStudents";
 import AdminRoute from "./components/Routes/AdminRoute";
+import AdminLevels from "./components/AdminLevels";
 
 function App() {
   const apiContext = useContext(ApiContextProvider);
@@ -32,11 +33,21 @@ function App() {
             </AdminRoute>
           }
         />
+
         <Route
           path="/admin/students/"
           element={
             <AdminRoute>
               <AdminStudents />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/levels/"
+          element={
+            <AdminRoute>
+              <AdminLevels />
             </AdminRoute>
           }
         />

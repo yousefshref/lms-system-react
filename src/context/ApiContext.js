@@ -128,6 +128,67 @@ const ApiContext = ({ children }) => {
     }
   };
 
+  const createLevel = async ({ data = {} }) => {
+    setLoginLoading(true);
+    try {
+      const response = await axios.post(
+        `${server}api/v1/levels/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        success("تم اضافة المستوي بنجاح");
+        return await response.data;
+      } else {
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const updateLevel = async ({ id, data = {} }) => {
+    setLoginLoading(true);
+    try {
+      const response = await axios.put(
+        `${server}api/v1/levels/${id}/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        success("تم تعديل المستوي بنجاح");
+        return await response.data;
+      } else {
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const deleteLevel = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${server}api/v1/levels/${id}/`,
+        headers
+      );
+      if (response.data.success) {
+        success("تم حذف المستوي بنجاح");
+        getLevels();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const [students, setStudents] = useState([]);
   const [studentsLoading, setStudentsLoading] = useState(false);
 
@@ -258,6 +319,9 @@ const ApiContext = ({ children }) => {
 
         levels,
         getLevels,
+        createLevel,
+        updateLevel,
+        deleteLevel,
 
         user,
         usersLoading,

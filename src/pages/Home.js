@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FiVideo } from "react-icons/fi";
 import { GrTechnology } from "react-icons/gr";
 import { IoLockOpenOutline } from "react-icons/io5";
+import { ApiContextProvider } from "../context/ApiContext";
 
 const Home = () => {
+  const apiContext = useContext(ApiContextProvider);
   const features = [
     {
       id: 1,
@@ -31,7 +33,12 @@ const Home = () => {
     <div className="flex flex-col">
       <header className="hidden md:flex w-full flex-row justify-between p-3 rounded-xl bg-white">
         <div className="my-auto w-1/3 justify-center flex flex-row gap-5">
-          <button className="btn-blue">تسجيل كطالب</button>
+          <button
+            onClick={() => apiContext.navigate("/login")}
+            className="btn-blue"
+          >
+            تسجيل كطالب
+          </button>
         </div>
         <div className="my-auto w-1/3 justify-center">
           <img
