@@ -269,6 +269,23 @@ const ApiContext = ({ children }) => {
     }
   };
 
+  const storeStudentsWithExcel = async ({ data = {} }) => {
+    setStudentsLoading(true);
+    try {
+      const response = await axios.post(
+        `${server}api/v1/students/excel/`,
+        data,
+        headers
+      );
+      success("تم تحميل الطلاب بنجاح");
+      return await response.data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStudentsLoading(false);
+    }
+  };
+
   const createStudentImage = async ({ images = {}, student_id = "" }) => {
     setStudentsLoading(true);
     const data = new FormData();
@@ -313,6 +330,7 @@ const ApiContext = ({ children }) => {
         createStudent,
         updateStudent,
         deleteStudent,
+        storeStudentsWithExcel,
 
         createStudentImage,
         deleteStudentImage,
