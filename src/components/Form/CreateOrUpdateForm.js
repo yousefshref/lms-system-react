@@ -69,6 +69,56 @@ const CreateOrUpdateForm = ({ open, setOpen, form }) => {
       });
   };
 
+  const createForm = () => {
+    apiContext
+      .createForm({
+        form_id: form?.id,
+        data: {
+          name: name,
+          description: description,
+          form_fields: formFields,
+        },
+      })
+      .then((res) => {
+        if (res?.id) {
+          setOpen(false);
+          apiContext.getForms();
+          setName("");
+          setDescription("");
+          setDescription([]);
+
+          const updateFields = formFields?.filter((e) => e?.id);
+          const createFields = formFields?.filter((e) => !e?.id);
+
+          if (updateFields?.length > 0) {
+            updateFields?.map((field) => {
+              apiContext.updateFormField({
+                field_id: field?.id,
+                data: {
+                  name: field?.name,
+                  type: field?.type,
+                  is_required: field?.is_required,
+                },
+              });
+            });
+          }
+
+          if (createFields?.length > 0) {
+            createFields?.map((field) => {
+              apiContext.createFormField({
+                data: {
+                  form: res?.id,
+                  name: field?.name,
+                  type: field?.type,
+                  is_required: field?.is_required,
+                },
+              });
+            });
+          }
+        }
+      });
+  };
+
   return (
     <Modal
       centered
@@ -77,6 +127,8 @@ const CreateOrUpdateForm = ({ open, setOpen, form }) => {
       onOk={() => {
         if (form?.id) {
           updateForm();
+        } else {
+          createForm();
         }
       }}
       closeIcon={false}

@@ -3,6 +3,7 @@ import AdminDefault from "../../../components/Layouts/AdminDefault";
 import { ApiContextProvider } from "../../../context/ApiContext";
 import Form from "../../../components/Form/Form";
 import Answer from "../../../components/Form/Answer";
+import CreateOrUpdateForm from "../../../components/Form/CreateOrUpdateForm";
 
 const AdminForms = () => {
   const apiContext = useContext(ApiContextProvider);
@@ -12,13 +13,21 @@ const AdminForms = () => {
     apiContext.getForms();
   }, []);
 
+  const [open, setOpen] = useState(false);
+
   return (
     <AdminDefault>
       <div
         style={{ backgroundImage: `url(/images/Forms/forms_bg.png)` }}
         className="p-3 bg-opacity-30 rounded-xl flex flex-col gap-3 max-h-[300px] min-h-fit bg-cover"
       >
-        <h3 className="text-xl">جميع الاستمارات</h3>
+        <div className="flex justify-between">
+          <h3 className="text-xl">جميع الاستمارات</h3>
+          <button onClick={() => setOpen(true)} className="btn-green">
+            انشاء استمارة
+          </button>
+        </div>
+        <CreateOrUpdateForm open={open} setOpen={setOpen} />
         <hr />
         <div className="flex rounded-xl flex-col gap-3 max-h-full overflow-y-scroll">
           {forms?.length > 0 ? (
