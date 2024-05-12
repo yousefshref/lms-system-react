@@ -321,9 +321,253 @@ const ApiContext = ({ children }) => {
     }
   };
 
+  const [forms, setForms] = useState([]);
+  const [formsLoading, setFormsLoading] = useState(false);
+
+  const getForms = async () => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.get(`${server}api/v1/forms/`, headers);
+      setForms(response.data);
+      return await response.data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const [form, setForm] = useState({});
+
+  const getForm = async ({ form_id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.get(
+        `${server}api/v1/forms/${form_id}/`,
+        headers
+      );
+      setForm(response.data);
+      return await response.data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const updateForm = async ({ data = {}, form_id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.put(
+        `${server}api/v1/forms/${form_id}/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        success("تم تعديل النموذج بنجاح");
+        getForms();
+        return await response.data;
+      } else {
+        console.log(response.data);
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const deleteForm = async ({ form_id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.delete(
+        `${server}api/v1/forms/${form_id}/`,
+        headers
+      );
+      success("تم حذف النموذج بنجاح");
+      getForms();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const createForm = async ({ data = {} }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.post(
+        `${server}api/v1/forms/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        success("تم تسجيل النموذج بنجاح");
+        getForms();
+        return await response.data;
+      } else {
+        console.log(response.data);
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const createFormField = async ({ data = {} }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.post(
+        `${server}api/v1/form-fields/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        getForms();
+        return await response.data;
+      } else {
+        console.log(response.data);
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const updateFormField = async ({ data = {}, field_id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.put(
+        `${server}api/v1/form-fields/${field_id}/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        getForms();
+        return await response.data;
+      } else {
+        console.log(response.data);
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const deleteFormField = async ({ field_id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.delete(
+        `${server}api/v1/form-fields/${field_id}/`,
+        headers
+      );
+      getForms();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const createFormAnswerParent = async ({ data = {} }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.post(
+        `${server}api/v1/form-answers/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        return await response.data;
+      } else {
+        console.log(response.data);
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const [formAnswers, setFormAnswers] = useState([]);
+
+  const getFormAnswers = async ({ form_id = "" }) => {
+    setFormsLoading(true);
+    try {
+      const response = await axios.get(
+        `${server}api/v1/form-answers/?form_id=${form_id}`,
+        headers
+      );
+      setFormAnswers(response.data);
+      return await response.data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setFormsLoading(false);
+    }
+  };
+
+  const createFormAnswer = async ({ data = {} }) => {
+    try {
+      const response = await axios.post(
+        `${server}api/v1/answers/`,
+        data,
+        headers
+      );
+      if (response.data?.id) {
+        return await response.data;
+      } else {
+        console.log(response.data);
+        Object?.entries(response?.data)?.forEach(([key, value]) => {
+          error(`${key}: ${value}`);
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+    }
+  };
+
   return (
     <ApiContextProvider.Provider
       value={{
+        createFormAnswerParent,
+        formAnswers,
+        getFormAnswers,
+
+        createFormAnswer,
+
+        forms,
+        formsLoading,
+        getForms,
+        form,
+        getForm,
+        updateForm,
+        deleteForm,
+        createForm,
+
+        createFormField,
+        updateFormField,
+        deleteFormField,
+
         students,
         studentsLoading,
         getStudents,

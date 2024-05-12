@@ -8,6 +8,8 @@ import Admin from "./pages/Admin/Admin";
 import AdminStudents from "./pages/Admin/Students/AdminStudents";
 import AdminRoute from "./components/Routes/AdminRoute";
 import AdminLevels from "./components/AdminLevels";
+import AdminForms from "./pages/Admin/Forms/AdminForms";
+import FormAnswer from "./pages/FormAnswer";
 
 function App() {
   const apiContext = useContext(ApiContextProvider);
@@ -17,7 +19,8 @@ function App() {
       {apiContext?.loginLoading ||
       apiContext?.studentsLoading ||
       apiContext?.signUpLoading ||
-      apiContext?.usersLoading ? (
+      apiContext?.usersLoading ||
+      apiContext?.formsLoading ? (
         <Loading />
       ) : null}
 
@@ -50,6 +53,20 @@ function App() {
               <AdminLevels />
             </AdminRoute>
           }
+        />
+
+        <Route
+          path="/admin/forms/"
+          element={
+            <AdminRoute>
+              <AdminForms />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/forms/:formName/:formId/apply/"
+          element={<FormAnswer />}
         />
       </Routes>
     </>

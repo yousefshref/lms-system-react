@@ -4,10 +4,9 @@ export const server = "https://yousefshreef1.pythonanywhere.com/";
 export const types = [
   "text",
   "number",
-  "email",
   "date",
   "time",
   "checkbox",
   "textarea",
-  "file",
+  "image",
 ];

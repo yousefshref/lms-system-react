@@ -25,6 +25,13 @@ const AdminDefault = ({ children }) => {
         apiContext.navigate("/admin/levels/");
       },
     },
+    {
+      key: "2",
+      label: <p className="font">الاستمارات</p>,
+      onClick: () => {
+        apiContext.navigate("/admin/forms/");
+      },
+    },
   ];
 
   return (
