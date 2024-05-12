@@ -70,7 +70,12 @@ const Home = () => {
           <button>كورسات</button>
         </div>
         <div className="my-auto md:w-1/3 mt-2 justify-center flex flex-row gap-5">
-          <button className="btn-blue">تسجيل كطالب</button>
+          <button
+            onClick={() => apiContext.navigate("/login")}
+            className="btn-blue"
+          >
+            تسجيل كطالب
+          </button>
         </div>
       </header>
 
