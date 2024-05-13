@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ApiContextProvider } from "../../context/ApiContext";
 import Loading from "../Loading";
 import { server } from "../../utlits/Variable";
+import { Link } from "react-router-dom";
 
 const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
   const apiContext = useContext(ApiContextProvider);
@@ -129,16 +130,26 @@ const CreateOrUpdateStudent = ({ open, setOpen, student }) => {
       ) : null}
       <div className="min-h-fit max-h-[500px] overflow-y-scroll flex flex-col gap-5 p-3 rounded-xl bg-zinc-300">
         {student?.id && (
-          <button
-            onClick={() =>
-              apiContext
-                ?.deleteStudent({ student_id: student?.id })
-                .then(() => setOpen(false))
-            }
-            className="w-fit btn-red"
-          >
-            حذف الطالب
-          </button>
+          <div className="flex gap-5">
+            <button
+              onClick={() =>
+                apiContext
+                  ?.deleteStudent({ student_id: student?.id })
+                  .then(() => setOpen(false))
+              }
+              className="w-fit btn-red"
+            >
+              حذف الطالب
+            </button>
+            <Link
+              to={`/admin/students/${student?.full_name?.replace(
+                /\s+/g,
+                "-"
+              )}/${student?.id}/`}
+            >
+              <button className="btn-indigo">صفحة الطالب</button>
+            </Link>
+          </div>
         )}
         <div className="flex flex-col gap-1 p-3 rounded-xl bg-white">
           <p>الاسم بالكامل</p>

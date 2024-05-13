@@ -60,7 +60,7 @@ const ApiContext = ({ children }) => {
       if (response.data.token) {
         success("تم تسجيل الدخول بنجاح");
         localStorage.setItem("token", response.data.token);
-        localStorage.setItem("id", response.data.id);
+        localStorage.setItem("id", response.data.user?.id);
         if (response.data.user.is_superuser) {
           navigate("/admin");
         } else {
@@ -197,6 +197,24 @@ const ApiContext = ({ children }) => {
     try {
       const response = await axios.get(`${server}api/v1/students/`, headers);
       setStudents(response.data);
+      return await response.data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setStudentsLoading(false);
+    }
+  };
+
+  const [student, setStudent] = useState({});
+
+  const getStudent = async (id) => {
+    setStudentsLoading(true);
+    try {
+      const response = await axios.get(
+        `${server}api/v1/students/${id}/`,
+        headers
+      );
+      setStudent(response.data);
       return await response.data;
     } catch (err) {
       console.log(err);
@@ -509,11 +527,11 @@ const ApiContext = ({ children }) => {
 
   const [formAnswers, setFormAnswers] = useState([]);
 
-  const getFormAnswers = async ({ form_id = "" }) => {
+  const getFormAnswers = async ({ form_id = "", student_id = "" }) => {
     setFormsLoading(true);
     try {
       const response = await axios.get(
-        `${server}api/v1/form-answers/?form_id=${form_id}`,
+        `${server}api/v1/form-answers/?form_id=${form_id}&student_id=${student_id}`,
         headers
       );
       setFormAnswers(response.data);
@@ -571,6 +589,8 @@ const ApiContext = ({ children }) => {
         students,
         studentsLoading,
         getStudents,
+        student,
+        getStudent,
         createStudent,
         updateStudent,
         deleteStudent,

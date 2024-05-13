@@ -10,6 +10,7 @@ import AdminRoute from "./components/Routes/AdminRoute";
 import AdminLevels from "./components/AdminLevels";
 import AdminForms from "./pages/Admin/Forms/AdminForms";
 import FormAnswer from "./pages/FormAnswer";
+import StudentDetails from "./pages/Admin/Students/StudentDetails";
 
 function App() {
   const apiContext = useContext(ApiContextProvider);
@@ -42,6 +43,15 @@ function App() {
           element={
             <AdminRoute>
               <AdminStudents />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="/admin/students/:studentName/:studentId/"
+          element={
+            <AdminRoute>
+              <StudentDetails />
             </AdminRoute>
           }
         />

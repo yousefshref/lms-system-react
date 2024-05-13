@@ -25,6 +25,20 @@ const FormAnswer = () => {
   const [answersData, setAnswersData] = useState([]);
 
   useEffect(() => {
+    apiContext?.getUser().then((e) => {
+      if (typeof form?.id !== "undefined") {
+        if (
+          form?.levels?.includes(e?.student_detail?.level) ||
+          e?.is_superuser
+        ) {
+        } else {
+          apiContext?.navigate("/");
+        }
+      }
+    });
+  }, [form]);
+
+  useEffect(() => {
     if (
       form?.form_fields &&
       form?.form_fields?.length !== answersData?.length
@@ -45,26 +59,26 @@ const FormAnswer = () => {
   }, [form?.form_fields]);
 
   const createFormAnswerParent = async () => {
-    apiContext
-      ?.createFormAnswerParent({
+    const parentResponse = await apiContext?.createFormAnswerParent({
+      data: {
+        user: localStorage.getItem("id") || "",
+        form: answersData[0].form,
+      },
+    });
+
+    const createAnswersPromises = answersData?.map((answer) =>
+      apiContext?.createFormAnswer({
         data: {
-          user: answersData[0].user || "",
-          form: answersData[0].form,
+          parent: parentResponse?.id,
+          field: answer?.field,
+          answer: answer?.answer,
         },
       })
-      .then((e) => {
-        answersData?.map((answer) => {
-          apiContext?.createFormAnswer({
-            data: {
-              parent: e?.id,
-              field: answer?.field,
-              answer: answer?.answer,
-            },
-          });
-        });
-      });
+    );
+
+    await Promise.all(createAnswersPromises);
+
     apiContext?.navigate(-1);
-    // console.log(answersData);
   };
 
   return (
