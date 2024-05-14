@@ -4,7 +4,7 @@ import { MdAccountCircle } from "react-icons/md";
 import { ApiContextProvider } from "../../context/ApiContext";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 
-const AdminDefault = ({ children }) => {
+const AdminDefault = ({ children, width }) => {
   const apiContext = useContext(ApiContextProvider);
 
   const accountsList = [
@@ -59,7 +59,13 @@ const AdminDefault = ({ children }) => {
           </Dropdown>
         </div>
       </header>
-      <div className="flex flex-col gap-5 w-full max-w-3xl mx-auto">
+      <div
+        className={
+          width
+            ? "flex flex-col gap-5 w-full mx-auto"
+            : "flex flex-col gap-5 w-full max-w-3xl mx-auto"
+        }
+      >
         {children}
       </div>
     </div>
